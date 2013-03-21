@@ -16,25 +16,25 @@ namespace DrumSimulator.Model
             this.drums = new Dictionary<String, Drum>();
             this.pedals = new Dictionary<String, Drum>();
 
-            Drum crash = new Drum(screenY / 8, screenX / 8, "Sounds/crash.wav", "/DrumSimulator;component/Data/Images/crash.png", new Point(-screenX / 4, -screenY / 4));
+            Drum crash = new Drum(screenY / 10, screenX / 10, "Sounds/crash.wav", "/DrumSimulator;component/Data/Images/crash.png", new Point(screenX / 10, -screenY / 7));
             this.drums.Add("crash", crash);
 
-            Drum snare = new Drum(screenY / 8, screenX / 8, "Sounds/snare.wav", "/DrumSimulator;component/Data/Images/snare.png", new Point(screenX / 10, screenY / 15));
+            Drum snare = new Drum(screenY / 10, screenX / 10, "Sounds/snare.wav", "/DrumSimulator;component/Data/Images/snare.png", new Point(-screenX / 6, 0));
             this.drums.Add("snare", snare);
 
-            Drum hihat = new Drum(screenY / 8, screenX / 8, "Sounds/hihat.wav", "/DrumSimulator;component/Data/Images/hihat.png", new Point(screenX / 8, -screenY / 4));
+            Drum hihat = new Drum(screenY / 10, screenX / 10, "Sounds/hihat.wav", "/DrumSimulator;component/Data/Images/hihat.png", new Point(-screenX / 5, -screenY / 5));
             this.drums.Add("hihat", hihat);
 
-            Drum tom1 = new Drum(screenY / 8, screenX / 3, "Sounds/tom.wav", "/DrumSimulator;component/Data/Images/tom.png", new Point(-screenX / 15, screenY / 50));
+            Drum tom1 = new Drum(screenY / 10, screenX / 10, "Sounds/tom.wav", "/DrumSimulator;component/Data/Images/tom.png", new Point(0, screenY / 20));
             this.drums.Add("tom1", tom1);
 
-            Drum tom2 = new Drum(screenY / 8, screenX / 3, "Sounds/tom.wav", "/DrumSimulator;component/Data/Images/tom.png", new Point(-screenX / 8, screenY / 50));
+            Drum tom2 = new Drum(screenY / 10, screenX / 10, "Sounds/tom.wav", "/DrumSimulator;component/Data/Images/tom.png", new Point(-screenX / 15, screenY / 20));
             this.drums.Add("tom2", tom2);
 
-            Drum low = new Drum(screenY / 6, screenX / 4, "Sounds/low.wav", "/DrumSimulator;component/Data/Images/low.png", new Point(-screenX / 5, screenY / 25));
+            Drum low = new Drum(screenY / 10, screenX / 10, "Sounds/low.wav", "/DrumSimulator;component/Data/Images/low.png", new Point(screenX / 12, 0));
             this.drums.Add("low", low);
 
-            Drum bass = new Drum(screenY / 4, screenX / 4, "Sounds/bassPedal.wav", "/DrumSimulator;component/Data/Images/bass.png", new Point(screenX / 75, screenY / 4));
+            Drum bass = new Drum(screenY / 5, screenX / 5, "Sounds/bassPedal.wav", "/DrumSimulator;component/Data/Images/bass.png", new Point(screenX / 75, screenY / 4));
             this.drums.Add("bass", bass);
         }
 
@@ -106,20 +106,6 @@ namespace DrumSimulator.Model
             }
             return null;
         }
-
-       /* public DrumHit hit(Extremity hand)
-        {
-            foreach (KeyValuePair<String, Drum> pair in this.drums)
-            {
-                Drum current = pair.Value;
-                if (current.Hit(hand) && !pair.Key.Equals("bass"))
-                {
-                    return new DrumHit(current.SoundPath, current.Position, pair.Key);
-                }
-            }
-            return null;
-        }*/
-
 
         public void update(Point body) {
             foreach (KeyValuePair<String, Drum> pair in this.drums)
