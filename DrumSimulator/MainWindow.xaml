@@ -48,11 +48,6 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
                         
-            <Rectangle x:Name="body"
-                       Height="25" Width="25" Fill="Red"
-                       Canvas.Left="{Binding Path=BodyLeft}" Canvas.Top="{Binding Path=BodyTop}"
-             />
-
         </Canvas>
 
     </Grid>

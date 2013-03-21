@@ -149,14 +149,6 @@ namespace DrumSimulator
             Double leftFootX = ScaleVector(this.screenX, this.currentSkeleton.Joints[JointType.FootLeft].Position.X);
             Double leftFootY = ScaleVector(this.screenY, -this.currentSkeleton.Joints[JointType.FootLeft].Position.Y);
             this.extremities["leftFoot"].Position = new System.Windows.Point(leftFootX, leftFootY);
-            Double heightL = this.currentSkeleton.Joints[JointType.FootLeft].Position.Y;
-            Double heightR = this.currentSkeleton.Joints[JointType.FootRight].Position.Y;
-            Double ratio = heightR / heightL;
-            Console.WriteLine(ratio);
-            /*if (ratio > 0.7 && ratio < 0.95)
-            {
-                this.playSound("Sounds/bell.wav");
-            }*/
 
             Double rightFootX = ScaleVector(this.screenX, this.currentSkeleton.Joints[JointType.FootRight].Position.X);
             Double rightFootY = ScaleVector(this.screenY, -this.currentSkeleton.Joints[JointType.FootRight].Position.Y);
@@ -210,9 +202,7 @@ namespace DrumSimulator
             else
             {
                 bassPressed = false;
-            }
-
-            
+            }         
         }
 
         private void frameUpdate(object sender, SkeletonFrameReadyEventArgs e)
@@ -256,40 +246,6 @@ namespace DrumSimulator
                 }
             }
         }
-
-        #region Body
-
-        public Double BodyLeft
-        {
-            get
-            {
-                if (this.currentSkeleton != null)
-                {
-                    return this.bodyCenter.X;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-
-        public Double BodyTop
-        {
-            get
-            {
-                if (this.currentSkeleton != null)
-                {
-                    return this.bodyCenter.Y;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-
-        #endregion
 
         #region Property Changed
 
