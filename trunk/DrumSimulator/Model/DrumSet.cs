@@ -10,11 +10,13 @@ namespace DrumSimulator.Model
     {
         IDictionary<String, Drum> drums;
         IDictionary<String, Drum> pedals;
+        IDictionary<String, bool> pedalPressed;
         
         public DrumSet(int screenX, int screenY)
         {
             this.drums = new Dictionary<String, Drum>();
             this.pedals = new Dictionary<String, Drum>();
+            this.pedalPressed = new Dictionary<String, bool>();
 
             Drum crash = new Drum(screenY / 10, screenX / 10, "Sounds/crash.wav", "/DrumSimulator;component/Data/Images/crash.png", new Point(screenX / 10, -screenY / 7));
             this.drums.Add("crash", crash);
@@ -34,31 +36,40 @@ namespace DrumSimulator.Model
             Drum low = new Drum(screenY / 10, screenX / 10, "Sounds/low.wav", "/DrumSimulator;component/Data/Images/low.png", new Point(screenX / 12, 0));
             this.drums.Add("low", low);
 
-            Drum bass = new Drum(screenY / 5, screenX / 5, "Sounds/bassPedal.wav", "/DrumSimulator;component/Data/Images/bass.png", new Point(screenX / 75, screenY / 4));
-            this.drums.Add("bass", bass);
+            PedalDrum bass = new PedalDrum(screenY / 5, screenX / 5, "Sounds/bassPedal.wav", "/DrumSimulator;component/Data/Images/bass.png", new Point(screenX / 75, screenY / 4));
+            this.pedals.Add("bass", bass);
+        }
+
+        private IDictionary<String, Drum> AllDrums()
+        {
+            IDictionary<String, Drum> all = new Dictionary<String, Drum>();
+            foreach (KeyValuePair<String, Drum> pair in this.drums)
+            {
+                all.Add(pair.Key, pair.Value);
+            }
+            foreach (KeyValuePair<String, Drum> pair in this.pedals)
+            {
+                all.Add(pair.Key, pair.Value);
+            }
+            return all;
         }
 
         public IEnumerable<Drum> GetDrums()
         {
-            foreach (KeyValuePair<String, Drum> pair in this.drums)
+            IDictionary<String, Drum> all = this.AllDrums();
+            foreach (KeyValuePair<String, Drum> pair in all)
             {
-                Drum current = pair.Value;
-                yield return current;
+                yield return pair.Value;
             }
         }
 
         private Drum GetDrum(String key)
         {
             Drum result;
-            if (this.drums.ContainsKey(key))
+            IDictionary<String, Drum> all = this.AllDrums();
+            if (all.ContainsKey(key))
             {
-                // it's a drum
-                result = this.drums[key];
-            }
-            else if (this.pedals.ContainsKey(key))
-            {
-                // it's a pedal
-                result = this.pedals[key];
+                result = all[key];
             }
             else
             {
@@ -89,7 +100,7 @@ namespace DrumSimulator.Model
             foreach (KeyValuePair<String, Drum> pair in this.drums)
             {
                 Drum current = pair.Value;
-                if (current.Hit(hand) && !pair.Key.Equals("bass"))
+                if (current.Hit(hand))
                 {
                     return new DrumHit(current.SoundPath, current.Position, pair.Key);
                 }
@@ -97,22 +108,38 @@ namespace DrumSimulator.Model
             return null;
         }
 
+        // so far we only have one pedal
         public DrumHit bassHit(Double ratio)
         {
-            Drum bass = this.drums["bass"];
-            if (ratio > 0.93 && ratio < 1.2)
+            PedalDrum bass = (PedalDrum) this.pedals["bass"];
+            if (bass.Hit(ratio))
             {
-                return new DrumHit(bass.SoundPath, bass.Position, "bass");
+                if (this.pedalPressed["bass"].Equals(false))
+                {
+                    this.pedalPressed["bass"] = true;
+                    return new DrumHit(bass.SoundPath, bass.Position, "bass");
+                }
+                return null;
             }
-            return null;
+            else
+            {
+                this.pedalPressed["bass"] = false;
+                return null;
+            }
+        }
+
+        private void updateDrumDictionary(ref IDictionary<String, Drum> drumDict, Point body)
+        {
+            foreach (KeyValuePair<String, Drum> pair in drumDict)
+            {
+                Drum current = pair.Value;
+                drumDict[pair.Key].Position = new Point(body.X + current.Offset.X, body.Y + current.Offset.Y);
+            } 
         }
 
         public void update(Point body) {
-            foreach (KeyValuePair<String, Drum> pair in this.drums)
-            {
-                Drum current = pair.Value;
-                this.drums[pair.Key].Position = new Point(body.X + current.Offset.X, body.Y + current.Offset.Y);
-            }        
+            this.updateDrumDictionary(ref this.drums, body);
+            this.updateDrumDictionary(ref this.pedals, body);    
         }
     }
 }

@@ -55,7 +55,6 @@ namespace DrumSimulator
         private int screenY;
         
         private int frameCounter = 0;
-        private bool bassPressed = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -166,6 +165,8 @@ namespace DrumSimulator
 
         private void checkHits()
         {
+            // Drums and hands
+
             foreach (KeyValuePair<String, Extremity> pair in this.extremities)
             {
                 Extremity currentEx = pair.Value;
@@ -187,22 +188,17 @@ namespace DrumSimulator
                     this.extremities[pair.Key].ExtremityState = Extremity.State.OUT;
                 }
             }
+            
+            // Pedals
+
             Double heightL = this.currentSkeleton.Joints[JointType.FootLeft].Position.Y;
             Double heightR = this.currentSkeleton.Joints[JointType.FootRight].Position.Y;
             Double feetRatio = heightR / heightL;
             DrumHit bassHit = this.drumSet.bassHit(feetRatio);
-            if (bassHit != null) {
-                if (!bassPressed)
-                {
-                    this.playSound(bassHit.SoundPath);
-                    bassPressed = true;
-                }
-                
-            }
-            else
+            if (bassHit != null)
             {
-                bassPressed = false;
-            }         
+                this.playSound(bassHit.SoundPath);
+            }
         }
 
         private void frameUpdate(object sender, SkeletonFrameReadyEventArgs e)

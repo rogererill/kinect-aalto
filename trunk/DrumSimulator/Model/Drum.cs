@@ -140,6 +140,18 @@ namespace DrumSimulator.Model
         }
     }
 
+    class PedalDrum : Drum
+    {
+
+        public PedalDrum(Double height, Double width, String soundPath, String imagePath, Point off)
+            : base(height, width, soundPath, imagePath, off) { }
+
+        public Boolean Hit(Double footRatio)
+        {
+            return (footRatio > 0.93 && footRatio < 1.2);
+        }
+    }
+
     class DrumHit
     {
         private String key;
